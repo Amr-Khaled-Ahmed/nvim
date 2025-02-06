@@ -29,8 +29,8 @@ wk.register({
   s = { "<cmd>!git status<CR>", "Git Status" },
   p = { "<cmd>!git push<CR>", "Git Push" },
   P = { "<cmd>!git pull<CR>", "Git Pull" },
-  c = { "<cmd>!git commit<CR>", "Git Commit" },
-  C = { "<cmd>!git commit --amend<CR>", "Git Commit Amend" },  -- Amend last commit
+  c = { "<cmd>!git commit -m 'Your commit message'<CR>", "Git Commit" },
+  C = { "<cmd>!git commit --amend -m 'Your new commit message'<CR>", "Git Commit Amend" },  -- Amend last commit
   f = { "<cmd>!git push --force<CR>", "Git Force Push" },  -- Force Push
   l = { "<cmd>!git log<CR>", "Git Log" },
 }, { prefix = "<leader>g" })
