@@ -17,6 +17,7 @@ end
 
 -- Register general key mappings
 wk.register({
+  -- File management
   e = { "<cmd>NvimTreeToggle<CR>", "File Explorer" },
   s = { "<cmd>w<CR>", "Save File" },
   q = { "<cmd>q<CR>", "Quit Neovim" },
@@ -24,36 +25,101 @@ wk.register({
   f = { "<cmd>Telescope find_files<CR>", "Search Files" },
 }, { prefix = "<leader>" })
 
--- ✅ Git commands under <leader>g
-wk.register({
-  s = { "<cmd>!git status<CR>", "Git Status" },
-  p = { "<cmd>!git push<CR>", "Git Push" },
-  P = { "<cmd>!git pull<CR>", "Git Pull" },
-  c = { "<cmd>!git commit -m 'Your commit message'<CR>", "Git Commit" },
-  C = { "<cmd>!git commit --amend -m 'Your new commit message'<CR>", "Git Commit Amend" },  -- Amend last commit
-  f = { "<cmd>!git push --force<CR>", "Git Force Push" },  -- Force Push
-  l = { "<cmd>!git log<CR>", "Git Log" },
-}, { prefix = "<leader>g" })
+-- ** Theme Control (Change themes and save last theme) **
+local last_theme = "gruvbox" -- Set your default theme here
+vim.cmd("colorscheme " .. last_theme)
 
--- ✅ PowerShell 7 terminal keybindings
 wk.register({
-  tv = { ":vsplit | term pwsh.exe<CR>", "Open PowerShell 7 (Vertical Split)" },
-  th = { ":botright split | resize 12 | term pwsh.exe<CR>", "Open PowerShell 7 (Bottom Split)" },
-  tf = { ":FloatermNew --height=0.9 --width=0.9 pwsh.exe<CR>", "Open PowerShell 7 (Large Floating Terminal)" },
+  t = { name = "Themes" },  -- Group for theme commands
+}, { prefix = "<leader>" })
+
+wk.register({
+  c = { function()
+    vim.cmd("Telescope colorscheme")
+  end, "Choose Theme" },
+  d = { function()
+    last_theme = vim.fn.input("Enter Theme Name: ", last_theme, "file")
+    vim.cmd("colorscheme " .. last_theme)
+  end, "Set Custom Theme" },
+  r = { function()
+    vim.cmd("colorscheme " .. last_theme)
+  end, "Restore Last Theme" },
 }, { prefix = "<leader>t" })
 
--- ✅ Clipboard keybindings (system clipboard)
-vim.keymap.set("n", "<C-c>", '"+y', { silent = true })
-vim.keymap.set("n", "<C-x>", '"+d', { silent = true })
-vim.keymap.set("n", "<C-v>", '"+p', { silent = true })
+-- ** Split Management & Navigation **
+wk.register({
+  s = { name = "Splits" },  -- Group for splits
+}, { prefix = "<leader>" })
 
--- ✅ Split Resizing with Shift + Ctrl + Arrow Keys
+wk.register({
+  v = { "<cmd>vsplit<CR>", "Vertical Split" },
+  h = { "<cmd>split<CR>", "Horizontal Split" },
+  n = { "<cmd>vsplit | term pwsh.exe<CR>", "Vertical Split with PowerShell" },
+  p = { "<cmd>split | term pwsh.exe<CR>", "Horizontal Split with PowerShell" },
+}, { prefix = "<leader>s" })
+
+-- Split navigation (Ctrl + Arrow)
 vim.keymap.set("n", "<C-S-Left>", "<cmd>vertical resize -2<CR>", { silent = true })
 vim.keymap.set("n", "<C-S-Right>", "<cmd>vertical resize +2<CR>", { silent = true })
 vim.keymap.set("n", "<C-S-Up>", "<cmd>resize +2<CR>", { silent = true })
 vim.keymap.set("n", "<C-S-Down>", "<cmd>resize -2<CR>", { silent = true })
 
--- ✅ Force which-key to reload on entering a new buffer (fixes <leader> issue)
+-- ** Tab Management & Navigation **
+wk.register({
+  t = { name = "Tabs" },  -- Group for tabs
+}, { prefix = "<leader>" })
+
+wk.register({
+  n = { "<cmd>tabnew<CR>", "New Tab" },
+  c = { "<cmd>tabclose<CR>", "Close Tab" },
+  p = { "<cmd>tabprevious<CR>", "Previous Tab" },
+  n = { "<cmd>tabnext<CR>", "Next Tab" },
+}, { prefix = "<leader>t" })
+
+-- ** Buffer Management & Navigation **
+wk.register({
+  b = { name = "Buffers" },  -- Group for buffers
+}, { prefix = "<leader>" })
+
+wk.register({
+  n = { "<cmd>enew<CR>", "New Buffer" },
+  d = { "<cmd>bdelete<CR>", "Delete Buffer" },
+  p = { "<cmd>bprevious<CR>", "Previous Buffer" },
+  n = { "<cmd>bnext<CR>", "Next Buffer" },
+  l = { "<cmd>buffers<CR>", "List Buffers" },
+}, { prefix = "<leader>b" })
+
+-- ** Git commands (Grouped under <leader>g) **
+wk.register({
+  g = { name = "Git" },  -- Group for git commands
+}, { prefix = "<leader>" })
+
+-- Git command mappings (assuming Git is installed on your machine)
+vim.keymap.set("n", "<leader>gp", ":!git push<CR>", { silent = true })  -- Git Push (external command)
+vim.keymap.set("n", "<leader>gc", ":!git commit<CR>", { silent = true })  -- Git Commit (external command)
+vim.keymap.set("n", "<leader>gs", ":!git status<CR>", { silent = true })  -- Git Status (external command)
+vim.keymap.set("n", "<leader>gl", ":!git log<CR>", { silent = true })  -- Git Log (external command)
+vim.keymap.set("n", "<leader>gf", ":!git fetch<CR>", { silent = true })  -- Git Fetch (external command)
+
+vim.keymap.set("n", "<leader>glg", ":FloatermNew lazygit<CR>", { silent = true })  -- Open LazyGit in floating terminal
+
+-- ** Terminal Management (Grouped under <leader>t) **
+wk.register({
+  t = { name = "Terminal" },  -- Group for terminal commands
+}, { prefix = "<leader>" })
+
+-- Terminal keybindings (PowerShell 7 specific)
+vim.keymap.set("n", "<leader>tv", ":vsplit | term pwsh<CR>", { silent = true })  -- Open PowerShell 7 (Vertical Split)
+vim.keymap.set("n", "<leader>th", ":split | term pwsh<CR>", { silent = true })  -- Open PowerShell 7 (Horizontal Split - bottom)
+
+vim.keymap.set("n", "<leader>tf", ":FloatermNew pwsh<CR>", { silent = true })  -- Open PowerShell 7 (Floating terminal)
+
+-- Clipboard keybindings (outside leader)
+vim.keymap.set("n", "<C-c>", '"+y', { silent = true })  -- Copy to Clipboard
+vim.keymap.set("n", "<C-x>", '"+d', { silent = true })  -- Cut to Clipboard
+vim.keymap.set("n", "<C-v>", '"+p', { silent = true })  -- Paste from Clipboard
+
+-- Fallback: Force reload of leader keymaps for any new context (git repo, etc.)
 vim.cmd([[
   augroup FixLeader
     autocmd!
@@ -61,7 +127,7 @@ vim.cmd([[
   augroup END
 ]])
 
--- ✅ Force apply line numbers (fixes missing numbers in some files)
+-- Force apply line numbers (fixes missing numbers in some files)
 vim.cmd([[
   augroup FixNumbers
     autocmd!
