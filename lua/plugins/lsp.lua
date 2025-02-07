@@ -14,26 +14,49 @@ return {
       "rafamadriz/friendly-snippets",
     },
     config = function()
+      -- Setup Mason
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "lua_ls", "powershell_es" },
+        ensure_installed = {
+          "lua_ls",       -- Lua
+          "powershell_es",-- PowerShell
+          "pyright",      -- Python
+          "clangd",       -- C, C++
+          "jdtls",        -- Java
+          "tsserver",     -- JavaScript, TypeScript
+          "html",         -- HTML
+          "cssls",        -- CSS
+          "intelephense", -- PHP
+        },
         automatic_installation = true,
       })
 
+      -- Enable LSP capabilities for nvim-cmp
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
       local lspconfig = require("lspconfig")
 
-      -- Configure LSP servers
-      lspconfig.lua_ls.setup({
-        capabilities = capabilities,
-      })
+      -- Define LSP servers
+      local servers = {
+        lua_ls = {},
+        powershell_es = {
+          bundle_path = vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services",
+        },
+        pyright = {},
+        clangd = {},
+        jdtls = {},
+        tsserver = {},
+        html = {},
+        cssls = {},
+        intelephense = {},
+      }
 
-      lspconfig.powershell_es.setup({
-        capabilities = capabilities,
-        bundle_path = vim.fn.stdpath("data") .. "/mason/packages/powershell-editor-services",
-      })
+      -- Setup each LSP server
+      for server, config in pairs(servers) do
+        config.capabilities = capabilities
+        lspconfig[server].setup(config)
+      end
 
-      -- Setup nvim-cmp
+      -- Setup nvim-cmp for autocompletion
       local cmp = require("cmp")
       local luasnip = require("luasnip")
 
