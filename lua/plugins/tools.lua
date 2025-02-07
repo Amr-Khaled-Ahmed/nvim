@@ -20,6 +20,12 @@ return {
     config = true,
   },
 
+
+
+
+
+
+  
   -- Better diagnostics list and others
   {
     "folke/trouble.nvim",
@@ -70,7 +76,7 @@ return {
   },
 
 
-  
+
   -- Noice: Floating Command Box
   {
     "folke/noice.nvim",
