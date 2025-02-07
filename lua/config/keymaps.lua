@@ -1,13 +1,6 @@
--- Set leader key to <Space>
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
+-- config/keymaps.lua
 
--- Ensure which-key loads safely
-local wk_status, wk = pcall(require, "which-key")
-if not wk_status then
-  vim.notify("Which-key not found!", vim.log.levels.ERROR)
-  return
-end
+local wk = require("which-key")
 
 -- Toggle line numbers mode (absolute <-> relative)
 local function toggle_line_numbers()
@@ -56,7 +49,7 @@ wk.register({
   n = { "<cmd>tabnext<CR>", "Next Tab" },
 }, { prefix = "<leader>t" })
 
--- ** Terminal ** (Moved to "x" prefix)
+-- ** Terminal **
 wk.register({
   x = { name = "Terminal" },
 }, { prefix = "<leader>" })
@@ -89,34 +82,16 @@ wk.register({
   l = { "<cmd>buffers<CR>", "List Buffers" },
 }, { prefix = "<leader>b" })
 
-
--- Register LazyGit keybinding
+-- ** Git **
 wk.register({
   g = { name = "Git" },
 }, { prefix = "<leader>" })
 
 wk.register({
-  g = { "<cmd>FloatermNew lazygit<CR>", "Floating LazyGit" }, -- LazyGit shortcut
+  g = { "<cmd>FloatermNew lazygit<CR>", "Floating LazyGit" },
 }, { prefix = "<leader>g" })
-
 
 -- ** Clipboard **
 vim.keymap.set("n", "<C-c>", '"+y', { silent = true })
 vim.keymap.set("n", "<C-x>", '"+d', { silent = true })
 vim.keymap.set("n", "<C-v>", '"+p', { silent = true })
-
--- ** Auto Commands **
-vim.cmd([[
-  augroup FixLeader
-    autocmd!
-    autocmd BufEnter * lua require("which-key").setup()
-  augroup END
-]])
-
-vim.cmd([[
-  augroup FixNumbers
-    autocmd!
-    autocmd BufEnter * set number relativenumber
-  augroup END
-]])
-
