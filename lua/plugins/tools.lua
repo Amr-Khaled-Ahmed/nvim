@@ -69,6 +69,8 @@ return {
     end,
   },
 
+
+  
   -- Noice: Floating Command Box
   {
     "folke/noice.nvim",

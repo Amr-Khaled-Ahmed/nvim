@@ -20,6 +20,10 @@ require("lazy").setup("plugins")
 
 
 
+
+
+
+
 -- Load configurations
 require("config.options")
 require("config.keymaps")
