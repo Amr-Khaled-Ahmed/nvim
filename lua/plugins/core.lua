@@ -54,4 +54,14 @@ return {
     "nvim-lua/plenary.nvim",
     lazy = true,
   },
+  -- NvimTree (File Explorer)
+  {
+    "nvim-tree/nvim-tree.lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("nvim-tree").setup({
+        -- Add your NvimTree configuration here
+      })
+    end,
+  },
 }

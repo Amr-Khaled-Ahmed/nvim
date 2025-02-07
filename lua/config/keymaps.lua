@@ -91,6 +91,19 @@ wk.register({
   g = { "<cmd>FloatermNew lazygit<CR>", "Floating LazyGit" },
 }, { prefix = "<leader>g" })
 
+-- Telescope Commands
+wk.register({
+  f = { name = "Telescope" },
+}, { prefix = "<leader>" })
+
+wk.register({
+  f = { "<cmd>Telescope find_files<CR>", "Find Files" },
+  g = { "<cmd>Telescope live_grep<CR>", "Live Grep" },
+  b = { "<cmd>Telescope buffers<CR>", "Buffers" },
+  h = { "<cmd>Telescope help_tags<CR>", "Help Tags" },
+  c = { "<cmd>Telescope commands<CR>", "Commands" }, -- Add Telescope commands to the menu
+}, { prefix = "<leader>f" })
+
 -- ** Clipboard **
 vim.keymap.set("n", "<C-c>", '"+y', { silent = true })
 vim.keymap.set("n", "<C-x>", '"+d', { silent = true })

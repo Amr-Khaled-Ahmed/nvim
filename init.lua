@@ -17,17 +17,7 @@ vim.opt.rtp:prepend(lazypath)
 -- Load plugins
 require("lazy").setup("plugins")
 
-
-
-
-
-
-
-
 -- Load configurations
 require("config.options")
 require("config.keymaps")
 require("config.autocmds")
-
--- Load utilities
-require("utils")
