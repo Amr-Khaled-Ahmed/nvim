@@ -6,6 +6,30 @@ return {
 
   -- Mason: LSP Manager
   { "williamboman/mason.nvim" },
+  { "williamboman/mason-lspconfig.nvim" },
+
+  -- LSP Config
+  { "neovim/nvim-lspconfig" },
+
+  -- Autocompletion
+  { "hrsh7th/nvim-cmp" },
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "hrsh7th/cmp-buffer" },
+  { "hrsh7th/cmp-path" },
+  { "hrsh7th/cmp-cmdline" },
+  { "L3MON4D3/LuaSnip" },
+  { "saadparwaiz1/cmp_luasnip" },
+
+  -- Git Plugins
+  { "lewis6991/gitsigns.nvim" },
+  { "kdheepak/lazygit.nvim" },
+  -- Additional Git Plugins
+  { "tpope/vim-fugitive" },  -- Git commands in Vim
+  { "junegunn/gv.vim" },      -- Git commit browser
+  { "sindrets/diffview.nvim", dependencies = { "nvim-lua/plenary.nvim" } },  -- Git diff viewer
+
+
+
 
   -- NvimTree: File Explorer
   { "nvim-tree/nvim-tree.lua" },
@@ -62,15 +86,11 @@ return {
       })
     end,
   },
-    
+
   {
     "voldikss/vim-floaterm",
     config = function()
-      -- Floaterm settings
-      vim.g.floaterm_keymap_new = "<leader>t"  -- Key to open a new floating terminal
-      vim.g.floaterm_keymap_toggle = "<leader>ft"  -- Key to toggle the floating terminal
+
     end
   }
 }
-
-

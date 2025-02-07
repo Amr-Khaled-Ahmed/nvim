@@ -1,12 +1,6 @@
--- keymap.lua
-
 -- Set leader key to <Space>
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-
--- Ensure line numbers are visible
-vim.opt.number = true
-vim.opt.relativenumber = true
 
 -- Ensure which-key loads safely
 local wk_status, wk = pcall(require, "which-key")
@@ -15,9 +9,18 @@ if not wk_status then
   return
 end
 
--- Register general key mappings
+-- Toggle line numbers mode (absolute <-> relative)
+local function toggle_line_numbers()
+  if vim.wo.relativenumber then
+    vim.wo.relativenumber = false
+  else
+    vim.wo.relativenumber = true
+  end
+end
+vim.keymap.set("n", "<leader>n", toggle_line_numbers, { desc = "Toggle Line Numbers Mode" })
+
+-- ** File Management **
 wk.register({
-  -- File management
   e = { "<cmd>NvimTreeToggle<CR>", "File Explorer" },
   s = { "<cmd>w<CR>", "Save File" },
   q = { "<cmd>q<CR>", "Quit Neovim" },
@@ -25,101 +28,84 @@ wk.register({
   f = { "<cmd>Telescope find_files<CR>", "Search Files" },
 }, { prefix = "<leader>" })
 
--- ** Theme Control (Change themes and save last theme) **
-local last_theme = "gruvbox" -- Set your default theme here
-vim.cmd("colorscheme " .. last_theme)
-
+-- ** Themes **
 wk.register({
-  t = { name = "Themes" },  -- Group for theme commands
+  T = { name = "Themes" },
 }, { prefix = "<leader>" })
 
 wk.register({
-  c = { function()
-    vim.cmd("Telescope colorscheme")
-  end, "Choose Theme" },
+  c = { "<cmd>Telescope colorscheme<CR>", "Choose Theme" },
   d = { function()
-    last_theme = vim.fn.input("Enter Theme Name: ", last_theme, "file")
+    last_theme = vim.fn.input("Enter Theme Name: ", "gruvbox", "file")
     vim.cmd("colorscheme " .. last_theme)
   end, "Set Custom Theme" },
   r = { function()
     vim.cmd("colorscheme " .. last_theme)
   end, "Restore Last Theme" },
-}, { prefix = "<leader>t" })
+}, { prefix = "<leader>T" })
 
--- ** Split Management & Navigation **
+-- ** Tabs **
 wk.register({
-  s = { name = "Splits" },  -- Group for splits
+  t = { name = "Tabs" },
 }, { prefix = "<leader>" })
 
 wk.register({
-  v = { "<cmd>vsplit<CR>", "Vertical Split" },
-  h = { "<cmd>split<CR>", "Horizontal Split" },
-  n = { "<cmd>vsplit | term pwsh.exe<CR>", "Vertical Split with PowerShell" },
-  p = { "<cmd>split | term pwsh.exe<CR>", "Horizontal Split with PowerShell" },
-}, { prefix = "<leader>s" })
-
--- Split navigation (Ctrl + Arrow)
-vim.keymap.set("n", "<C-S-Left>", "<cmd>vertical resize -2<CR>", { silent = true })
-vim.keymap.set("n", "<C-S-Right>", "<cmd>vertical resize +2<CR>", { silent = true })
-vim.keymap.set("n", "<C-S-Up>", "<cmd>resize +2<CR>", { silent = true })
-vim.keymap.set("n", "<C-S-Down>", "<cmd>resize -2<CR>", { silent = true })
-
--- ** Tab Management & Navigation **
-wk.register({
-  t = { name = "Tabs" },  -- Group for tabs
-}, { prefix = "<leader>" })
-
-wk.register({
-  n = { "<cmd>tabnew<CR>", "New Tab" },
+  t = { "<cmd>tabnew<CR>", "New Tab" },
   c = { "<cmd>tabclose<CR>", "Close Tab" },
   p = { "<cmd>tabprevious<CR>", "Previous Tab" },
   n = { "<cmd>tabnext<CR>", "Next Tab" },
 }, { prefix = "<leader>t" })
 
--- ** Buffer Management & Navigation **
+-- ** Terminal ** (Moved to "x" prefix)
 wk.register({
-  b = { name = "Buffers" },  -- Group for buffers
+  x = { name = "Terminal" },
+}, { prefix = "<leader>" })
+
+wk.register({
+  v = { "<cmd>vsplit | term pwsh<CR>", "Vertical Split Terminal" },
+  h = { "<cmd>split | term pwsh<CR>", "Horizontal Split Terminal" },
+  f = { "<cmd>FloatermNew pwsh<CR>", "Floating Terminal" },
+}, { prefix = "<leader>x" })
+
+-- ** Splits **
+wk.register({
+  s = { name = "Splits" },
+}, { prefix = "<leader>" })
+
+wk.register({
+  v = { "<cmd>vsplit<CR>", "Vertical Split" },
+  h = { "<cmd>split<CR>", "Horizontal Split" },
+}, { prefix = "<leader>s" })
+
+-- ** Buffer Management **
+wk.register({
+  b = { name = "Buffers" },
 }, { prefix = "<leader>" })
 
 wk.register({
   n = { "<cmd>enew<CR>", "New Buffer" },
   d = { "<cmd>bdelete<CR>", "Delete Buffer" },
   p = { "<cmd>bprevious<CR>", "Previous Buffer" },
-  n = { "<cmd>bnext<CR>", "Next Buffer" },
   l = { "<cmd>buffers<CR>", "List Buffers" },
 }, { prefix = "<leader>b" })
 
--- ** Git commands (Grouped under <leader>g) **
+
+-- Register LazyGit keybinding
 wk.register({
-  g = { name = "Git" },  -- Group for git commands
+  g = { name = "Git" },
 }, { prefix = "<leader>" })
 
--- Git command mappings (assuming Git is installed on your machine)
-vim.keymap.set("n", "<leader>gp", ":!git push<CR>", { silent = true })  -- Git Push (external command)
-vim.keymap.set("n", "<leader>gc", ":!git commit<CR>", { silent = true })  -- Git Commit (external command)
-vim.keymap.set("n", "<leader>gs", ":!git status<CR>", { silent = true })  -- Git Status (external command)
-vim.keymap.set("n", "<leader>gl", ":!git log<CR>", { silent = true })  -- Git Log (external command)
-vim.keymap.set("n", "<leader>gf", ":!git fetch<CR>", { silent = true })  -- Git Fetch (external command)
-
-vim.keymap.set("n", "<leader>glg", ":FloatermNew lazygit<CR>", { silent = true })  -- Open LazyGit in floating terminal
-
--- ** Terminal Management (Grouped under <leader>t) **
 wk.register({
-  t = { name = "Terminal" },  -- Group for terminal commands
-}, { prefix = "<leader>" })
+  g = { "<cmd>FloatermNew lazygit<CR>", "Floating LazyGit" }, -- LazyGit shortcut
+}, { prefix = "<leader>g" })
 
--- Terminal keybindings (PowerShell 7 specific)
-vim.keymap.set("n", "<leader>tv", ":vsplit | term pwsh<CR>", { silent = true })  -- Open PowerShell 7 (Vertical Split)
-vim.keymap.set("n", "<leader>th", ":split | term pwsh<CR>", { silent = true })  -- Open PowerShell 7 (Horizontal Split - bottom)
 
-vim.keymap.set("n", "<leader>tf", ":FloatermNew pwsh<CR>", { silent = true })  -- Open PowerShell 7 (Floating terminal)
+-- ** Clipboard **
+vim.keymap.set("n", "<C-c>", '"+y', { silent = true })
+vim.keymap.set("n", "<C-x>", '"+d', { silent = true })
+vim.keymap.set("n", "<C-v>", '"+p', { silent = true })
 
--- Clipboard keybindings (outside leader)
-vim.keymap.set("n", "<C-c>", '"+y', { silent = true })  -- Copy to Clipboard
-vim.keymap.set("n", "<C-x>", '"+d', { silent = true })  -- Cut to Clipboard
-vim.keymap.set("n", "<C-v>", '"+p', { silent = true })  -- Paste from Clipboard
-
--- Fallback: Force reload of leader keymaps for any new context (git repo, etc.)
+-- ** Auto Commands **
 vim.cmd([[
   augroup FixLeader
     autocmd!
@@ -127,7 +113,6 @@ vim.cmd([[
   augroup END
 ]])
 
--- Force apply line numbers (fixes missing numbers in some files)
 vim.cmd([[
   augroup FixNumbers
     autocmd!
