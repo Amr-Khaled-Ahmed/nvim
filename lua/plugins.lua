@@ -23,5 +23,5 @@ return {
     { import = "plugins.telescope" },
   
     -- Debugging Plugins
-    -- { import = "plugins.dap" },
+    { import = "plugins.dap" },
   }

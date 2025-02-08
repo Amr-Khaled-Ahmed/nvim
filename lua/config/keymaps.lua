@@ -104,20 +104,20 @@ wk.register({
   c = { "<cmd>Telescope commands<CR>", "Commands" }, -- Add Telescope commands to the menu
 }, { prefix = "<leader>f" })
 
--- -- debug
--- wk.register({
---   d = { name = "Debug" },
--- }, { prefix = "<leader>" })
+-- Debugging Keymaps
+wk.register({
+  d = { name = "Debug" },
+}, { prefix = "<leader>" })
 
--- wk.register({
---   b = { "<cmd>lua require'dap'.toggle_breakpoint()<CR>", "Toggle Breakpoint" },
---   c = { "<cmd>lua require'dap'.continue()<CR>", "Start/Continue Debugging" },
---   s = { "<cmd>lua require'dap'.step_over()<CR>", "Step Over" },
---   i = { "<cmd>lua require'dap'.step_into()<CR>", "Step Into" },
---   o = { "<cmd>lua require'dap'.step_out()<CR>", "Step Out" },
---   r = { "<cmd>lua require'dap'.repl.open()<CR>", "Open REPL" },
---   u = { "<cmd>lua require'dapui'.toggle()<CR>", "Toggle Debug UI" },
--- }, { prefix = "<leader>d" })
+wk.register({
+  b = { "<cmd>lua require'dap'.toggle_breakpoint()<CR>", "Toggle Breakpoint" },
+  c = { "<cmd>lua require'dap'.continue()<CR>", "Start/Continue Debugging" },
+  s = { "<cmd>lua require'dap'.step_over()<CR>", "Step Over" },
+  i = { "<cmd>lua require'dap'.step_into()<CR>", "Step Into" },
+  o = { "<cmd>lua require'dap'.step_out()<CR>", "Step Out" },
+  r = { "<cmd>lua require'dap'.repl.open()<CR>", "Open REPL" },
+  u = { "<cmd>lua require'dapui'.toggle()<CR>", "Toggle Debug UI" },
+}, { prefix = "<leader>d" })
 
 
 -- ** Clipboard **
