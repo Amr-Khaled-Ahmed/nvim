@@ -19,8 +19,6 @@ return {
             vim.keymap.set("n", "<leader>dr", function() dap.repl.open() end, { desc = "Open REPL" })
             vim.keymap.set("n", "<leader>dt", function() dap.terminate() end, { desc = "Terminate Debugging" })
 
-
-            
             -- Set up DAP adapters for Python and C++
             dap.adapters.python = {
                 type = "executable",
@@ -44,7 +42,7 @@ return {
                 type = "executable",
                 command = "C:\\Users\\Amr khaled\\.vscode\\extensions\\ms-vscode.cpptools-1.23.6-win32-x64\\debugAdapters\\bin\\OpenDebugAD7.exe",
             }
-            
+
             dap.configurations.cpp = {
                 {
                     name = "Launch C++",
@@ -66,6 +64,7 @@ return {
             local dapui = require("dapui")
             dapui.setup()
 
+            -- Automatically open/close DAP UI when debugging starts/stops
             dap.listeners.after.event_initialized["dapui_config"] = function()
                 dapui.open()
             end
@@ -80,7 +79,6 @@ return {
 
     -- Virtual Text for DAP
     {
-        "rcarriga/nvim-dap-ui",
         "theHamsta/nvim-dap-virtual-text",
         dependencies = { "mfussenegger/nvim-dap" },
         config = function()
