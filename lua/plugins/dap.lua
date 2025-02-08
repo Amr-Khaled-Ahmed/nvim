@@ -8,40 +8,63 @@ return {
 	config = function()
 		require("dapui").setup()
 
+
+		
 		local dap, dapui = require("dap"), require("dapui")
 		--choose between codelldb and cpptools
 		--local codelldb = require("mason-registry").get_package("codelldb"):get_install_path() .. "/codelldb"
 		--local cpptools = require("mason-registry").get_package("cpptools"):get_install_path()
 		--.. "/extension/debugAdapters/bin/OpenDebugAD7"
 
-		dap.defaults.fallback.external_terminal = {
-			command = "/usr/bin/kitty",
-			args = { "-e" },
-		}
+		-- dap.defaults.fallback.external_terminal = {
+		-- 	command = "/usr/bin/kitty",
+		-- 	args = { "-e" },
+		-- }
 		dap.defaults.fallback.force_external_terminal = false
 
 		--Test(Compile c++)
 
 		local function c_cpp_compile()
-			vim.cmd("w")
+			vim.cmd("w")  -- Save the current file
+		
 			local file_extension = vim.fn.expand("%:e")
 			local fullpath = vim.fn.expand("%:p")
-			local output_file = vim.fn.getcwd() .. "/out/" .. vim.fn.expand("%:r")
+			local output_dir = vim.fn.getcwd() .. "\\out"
+			local output_file = output_dir .. "\\" .. vim.fn.expand("%:r") .. ".exe"
+		
+			-- Ensure the output directory exists
+			vim.fn.mkdir(output_dir, "p")
+		
 			local command
 			if file_extension == "cpp" then
-				command = 'g++ -g -std=c++23 -fdiagnostics-all-candidates -fexec-charset=UTF-8 -o "'
-					.. output_file
-					.. '" "'
-					.. fullpath
-					.. '"'
+				command = 'g++ -g -std=c++17  -o "'
+						.. output_file
+						.. '" "'
+						.. fullpath
+						.. '"'
 			elseif file_extension == "c" then
-				command = 'gcc -g -std=c11 -fdiagnostics-all-candidates -fexec-charset=UTF-8 -o "'
-					.. output_file
-					.. '" "'
-					.. fullpath
-					.. '"'
+				command = 'gcc -g -std=c11 -o "'
+						.. output_file
+						.. '" "'
+						.. fullpath
+						.. '"'
+			else
+				print("Unsupported file type")
+				return
 			end
-			vim.fn.system(command)
+		
+			-- Replace forward slashes with backslashes for Windows compatibility
+			command = vim.fn.substitute(command, '/', '\\', 'g')
+		
+			-- Execute the command
+			local result = vim.fn.system(command)
+		
+			-- Check if the compilation was successful
+			if vim.v.shell_error ~= 0 then
+				print("Compilation failed: " .. result)
+			else
+				print("Compilation successful: " .. output_file)
+			end
 		end
 
 		vim.api.nvim_create_user_command("Compile", c_cpp_compile, {})
@@ -49,8 +72,11 @@ return {
 		dap.adapters.cppdbg = {
 			id = "cppdbg",
 			type = "executable",
-			command = "/home/omar/.local/share/nvim/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7",
+			command = "C:\\Users\\Amr khaled\\.vscode\\extensions\\ms-vscode.cpptools-1.23.6-win32-x64\\debugAdapters\\bin\\OpenDebugAD7.exe",
 			--command = cpptools,
+			options = {
+				detached = false
+			}
 		}
 
 		dap.adapters.codelldb = {
@@ -58,11 +84,11 @@ return {
 			port = "${port}",
 			executable = {
 				-- CHANGE THIS to your path!
-				command = "/home/omar/.local/share/nvim/mason/packages/codelldb/extension/adapter/codelldb",
+				command = "C:/Users/Amr khaled/AppData/Local/nvim-data/mason/packages/codelldb/extension/adapter/codelldb",
 				args = { "--port", "${port}" },
 
 				-- On windows you may have to uncomment this:
-				-- detached = false,
+				detached = false,
 			},
 		}
 
@@ -89,7 +115,7 @@ return {
 			else
 				cb({
 					type = "executable",
-					command = "/home/omar/.local/share/nvim/mason/packages/debugpy/venv/bin/python3",
+					command = "C:/Users/Amr khaled/AppData/Local/nvim-data/mason/packages/debugpy/venv/bin/python3",
 					args = { "-m", "debugpy.adapter" },
 					options = {
 						source_filetype = "python",
@@ -109,6 +135,7 @@ return {
 				end,
 				cwd = "${workspaceFolder}/out",
 				stopOnEntry = false,
+
 			},
 			{
 				name = "Launch vs-cpptools",
@@ -120,6 +147,9 @@ return {
 				end,
 				cwd = "${workspaceFolder}/out",
 				stopAtEntry = false,
+				-- externalConsole = false,
+				MIMode = "gdb",
+
 				setupCommands = {
 					{
 						text = "-enable-pretty-printing",
@@ -135,7 +165,7 @@ return {
 			if session.config.type == "cppdbg" or session.config.type == "codelldb" then
 				--local executable_path = vim.fn.expand("%:t:r")
 				--os.remove(executable_path)
-				os.execute("rm -rf .fuse_*")
+				os.execute("remove-Item -Recurse -Force .fuse_*")
 			end
 		end
 
@@ -216,7 +246,7 @@ return {
 			dapui.close()
 		end
 
-		--[[ require("nvim-dap-virtual-text").setup({
+		--[[require("nvim-dap-virtual-text").setup({
 			enabled = true, -- enable this plugin (the default)
 			enabled_commands = true, -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
 			highlight_changed_variables = true, -- highlight changed values with NvimDapVirtualTextChanged, else always NvimDapVirtualText
@@ -243,15 +273,15 @@ return {
 			-- e.g. 80 to position at column 80, see `:h nvim_buf_set_extmark()`
 		}) ]]
 
-		local sign = vim.fn.sign_define
+		-- local sign = vim.fn.sign_define
 
-		sign("DapBreakpoint", { text = "●", texthl = "DapBreakpoint" })
-		--sign("DapBreakpointCondition", { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
-		--sign("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
+		-- sign("DapBreakpoint", { text = "●", texthl = "DapBreakpoint" })
+		-- --sign("DapBreakpointCondition", { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
+		-- --sign("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
 
-		vim.keymap.set("n", "<Leader>dt", ":DapToggleBreakpoint<CR>")
-		vim.keymap.set("n", "<Leader>dc", ":DapContinue<CR>")
-		vim.keymap.set("n", "<Leader>dx", ":DapTerminate<CR>")
-		vim.keymap.set("n", "<Leader>do", ":DapStepOver<CR>")
+		-- vim.keymap.set("n", "<Leader>dt", ":DapToggleBreakpoint<CR>")
+		-- vim.keymap.set("n", "<Leader>dc", ":DapContinue<CR>")
+		-- vim.keymap.set("n", "<Leader>dx", ":DapTerminate<CR>")
+		-- vim.keymap.set("n", "<Leader>do", ":DapStepOver<CR>")
 	end,
 }
