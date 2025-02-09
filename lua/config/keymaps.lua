@@ -31,12 +31,23 @@ vim.keymap.set("n", "<leader>n", toggle_line_numbers, { desc = "🔢 Toggle Line
 
 -- File Management
 wk.register({
-  e = { "<cmd>NvimTreeToggle<CR>", "🌳 File Explorer" },
   s = { "<cmd>w<CR>", "💾 Save File" },
   q = { "<cmd>q<CR>", "🚪 Quit Neovim" },
   r = { "<cmd>source $MYVIMRC<CR>", "🔄 Reload Config" },
   f = { "<cmd>Telescope find_files<CR>", "🔍 Search Files" },
 }, { prefix = "<leader>" })
+
+
+wk.register({
+  e = {
+    name = "Explorer",  -- Group name
+    e = { ":Neotree filesystem toggle<CR>", "Toggle Filesystem" },
+    g = { ":Neotree git_status toggle<CR>", "Toggle Git Status" },
+    b = { ":Neotree buffers toggle<CR>", "Toggle Buffers" },
+    s = { ":Neotree document_symbols toggle<CR>", "Toggle LSP Symbols" },
+    d = { ":Neotree diagnostics toggle<CR>", "Toggle Diagnostics" },
+  },
+}, { prefix = "<leader>", mode = "n" })
 
 -- Themes
 wk.register({
@@ -268,6 +279,9 @@ vim.keymap.set("x", "<A-Right>", ">gv", { desc = "Indent Selection" })
 vim.keymap.set("x", "<A-Left>",  "<gv", { desc = "Unindent Selection" })
 
 
+vim.keymap.set("n", "<C-e>", ":Neotree filesystem toggle<CR>", { desc = "Toggle Neo-tree Filesystem" })
+vim.keymap.set("n", "<C-g>", ":Neotree git_status toggle<CR>", { desc = "Toggle Neo-tree Git Status" })
+vim.keymap.set("n", "<C-b>", ":Neotree buffers toggle<CR>", { desc = "Toggle Neo-tree Buffers" })
 
 -- Dashboard
 wk.register({
