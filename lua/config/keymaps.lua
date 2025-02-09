@@ -120,6 +120,7 @@ wk.register({
 }, { prefix = "<leader>" })
 
 wk.register({
+  e = { ":Neotree git_status toggle<CR>", "Toggle Git Status" },
   g = { "<cmd>FloatermNew lazygit<CR>", "🪟 LazyGit" },
   j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "⬇️ Next Hunk" },
   k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "⬆️ Prev Hunk" },
@@ -139,6 +140,7 @@ wk.register({
   R = { "<cmd>lua require 'gitsigns'.refresh()<cr>", "🔄 Refresh GitSigns" },
   W = { "<cmd>Telescope git_worktrees<CR>", "🌲 Git Worktrees" },
   C = { "<cmd>lua require 'gitsigns'.setqflist('all')<cr>", "📜 All Changes (Quickfix)" },
+
 }, { prefix = "<leader>g" })
 
 -- 🆕 Telescope Git Enhancements
@@ -149,6 +151,9 @@ wk.register({
   T = { "<cmd>Telescope git_stash<CR>", "📦 Git Stash" },
   W = { "<cmd>Telescope git_worktrees<CR>", "🌲 Git Worktrees" }, -- 🆕 New Feature
 }, { prefix = "<leader>g" })
+
+
+
 
 -- Telescope
 wk.register({
@@ -184,6 +189,8 @@ wk.register({
   R = { vim.lsp.buf.rename, "✏️ Rename Symbol" },
   e = { "<cmd>Telescope diagnostics<CR>", "⚠️ Show Diagnostics" },
   h = { vim.lsp.buf.hover, "ℹ️ Hover Info" },
+  F = { "y:%s/<C-r>\"//g<Left><Left>", "🔎 Find & Replace" }, 
+
 }, { prefix = "<leader>l" })
 
 -- Debugging
@@ -240,6 +247,35 @@ vim.keymap.set("n", "<Tab>", function()
     vim.cmd("belowright split | resize 10 | term pwsh")
   end
 end, { desc = "🖥️ Toggle Terminal" })
+
+
+vim.keymap.set("n", "<leader>/", function() require("Comment.api").toggle.linewise.current() end, { desc = "Toggle comment" })
+vim.keymap.set("v", "<leader>/", "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", { desc = "Toggle comment (visual)" })
+
+
+local wk = require("which-key")
+
+wk.register({
+  y = { '"+y', "Copy to clipboard" },
+  d = { '"_d', "Delete without yank" },
+  p = { '"_dP', "Paste without replacing register" },
+  ["<"] = { "<gv", "Indent Left" },
+  [">"] = { ">gv", "Indent Right" },
+  ["<Up>"] = { ":m '<-2<CR>gv=gv", "Move block up" },    -- Move selection up
+  ["<Down>"] = { ":m '>+1<CR>gv=gv", "Move block down" }, -- Move selection down
+  u = { "gU", "Uppercase" },
+  l = { "gu", "Lowercase" },
+  r = { "g~", "Toggle case" },
+  s = { ":sort<CR>", "Sort lines" },
+  ["*"] = { '"zy:%s/<C-r>z//g<Left><Left>', "Find & Replace" },
+  c = { '"_c', "Change without yanking" },
+  x = { '"_x', "Delete without yank" },
+  f = { ":lua vim.lsp.buf.format()<CR>", "Format selection" },
+  ["/"] = { ":lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>", "Toggle comment" },
+}, { prefix = "<leader>", mode = "v" })
+
+-- Register mappings in Which-Key
+wk.register(visual_mappings, { prefix = "<leader>", mode = "v" })
 
 -- Clipboard Operations
 vim.keymap.set("n", "<C-c>", '"+y', { silent = true, desc = "📋 Copy to Clipboard" })

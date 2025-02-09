@@ -1,4 +1,9 @@
--- init.lua
+-- Enable syntax highlighting early
+vim.cmd("syntax enable")
+vim.cmd("filetype plugin indent on")
+vim.cmd("syntax enable")
+vim.cmd("filetype plugin indent on")  -- Enable filetype detection
+
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -8,7 +13,7 @@ if not vim.loop.fs_stat(lazypath) then
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    "--branch=stable",
     lazypath,
   })
 end
