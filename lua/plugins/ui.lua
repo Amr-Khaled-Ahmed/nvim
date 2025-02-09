@@ -1,3 +1,5 @@
+-- lua/plugins.lua
+
 return {
   -- Lualine (Status Bar)
   {
@@ -88,20 +90,49 @@ return {
     config = function()
       require("bufferline").setup({
         options = {
-          mode = "tabs",
-          numbers = "ordinal",
-          separator_style = "slant",
-          show_buffer_close_icons = false,
-          show_close_icon = false,
-          color_icons = true,
-          enforce_regular_tabs = true,
-          diagnostics = "nvim_lsp",
+          mode = "tabs", -- Use tabs instead of buffers
+          numbers = "ordinal", -- Show ordinal numbers (e.g., 1, 2, 3)
+          separator_style = "thick", -- Use thick separators for rectangular tabs
+          show_buffer_close_icons = true, -- Show close icons for individual tabs
+          show_close_icon = true, -- Show close icon for the entire tabline
+          color_icons = true, -- Color icons based on file type
+          enforce_regular_tabs = true, -- Ensure all tabs are the same size
+          diagnostics = "nvim_lsp", -- Show LSP diagnostics in the tabline
           offsets = {
             {
               filetype = "NvimTree",
               text = "File Explorer",
               highlight = "Directory",
               text_align = "left",
+            },
+          },
+          -- Customize tab appearance
+          highlights = {
+            fill = {
+              bg = "#1e1e2e", -- Background color for the tabline
+            },
+            background = {
+              bg = "#1e1e2e", -- Background color for inactive tabs
+            },
+            buffer_selected = {
+              bg = "#3b4252", -- Background color for the selected tab
+              bold = true,
+              italic = false,
+            },
+            buffer_visible = {
+              bg = "#2e3440", -- Background color for visible but inactive tabs
+            },
+            tab = {
+              bg = "#1e1e2e", -- Background color for the tab
+            },
+            tab_selected = {
+              bg = "#3b4252", -- Background color for the selected tab
+              bold = true,
+              italic = false,
+            },
+            tab_close = {
+              bg = "#1e1e2e", -- Background color for the close button
+              fg = "#ff0000", -- Red color for the close button
             },
           },
         },
@@ -125,7 +156,6 @@ return {
           " |_|  |_/_/    \\_\\_| \\_|\\_____|_|  |_/_/    \\_\\_| \\_|",
         },
         {
-          
           " ▄  █ ▄█     ██   █▀▄▀█ █▄▄▄▄ ",
           " █   █ ██     █ █  █ █ █ █  ▄▀ ",
           " ██▀▀█ ██     █▄▄█ █ ▄ █ █▀▀▌  ",

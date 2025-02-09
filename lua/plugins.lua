@@ -24,4 +24,16 @@ return {
   
     -- Debugging Plugins
     { import = "plugins.dap" },
+    {
+      "folke/noice.nvim",
+      dependencies = {
+        "MunifTanjim/nui.nvim", -- Dependency for UI components
+        "rcarriga/nvim-notify",  -- Optional: For notifications
+      },
+      config = function()
+        require("config.noice") -- Load noice configuration
+      end,
+    },
   }
+
+  

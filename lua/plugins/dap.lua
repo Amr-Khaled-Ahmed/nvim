@@ -274,7 +274,26 @@ return {
 		}) ]]
 
 		-- local sign = vim.fn.sign_define
+		local dap = require("dap")
 
+		vim.fn.sign_define("DapBreakpoint", { text = "", texthl = "DapBreakpointSign" })  -- Red bug
+		vim.fn.sign_define("DapBreakpointCondition", { text = "", texthl = "DapBreakpointConditionSign" }) -- Question mark
+		vim.fn.sign_define("DapLogPoint", { text = "", texthl = "DapLogPointSign" }) -- Info icon
+		vim.fn.sign_define("DapStopped", { text = "➜", texthl = "DapStoppedSign", linehl = "DapStoppedLine" }) -- Execution pointer
+		vim.fn.sign_define("DapBreakpointRejected", { text = "", texthl = "DapBreakpointRejectedSign" }) -- Error cross
+		
+		-- Define colors
+		vim.api.nvim_set_hl(0, "DapBreakpointSign", { fg = "#FF0000", bold = true })  -- Red
+		vim.api.nvim_set_hl(0, "DapBreakpointConditionSign", { fg = "#FFA500", bold = true })  -- Orange
+		vim.api.nvim_set_hl(0, "DapLogPointSign", { fg = "#00FFFF", bold = true })  -- Cyan
+		vim.api.nvim_set_hl(0, "DapStoppedSign", { fg = "#00FF00", bold = true })  -- Green
+		vim.api.nvim_set_hl(0, "DapStoppedLine", { bg = "#44475a" })  -- Highlight current line
+		vim.api.nvim_set_hl(0, "DapBreakpointRejectedSign", { fg = "#FF0000", bg = "#FFFF00", bold = true })  -- Red on Yellow
+		-- vim.keymap.set("n", "<F10>", function() require("dap").step_over() end, { desc = "Step Over" })
+		-- vim.keymap.set("n", "<F11>", function() require("dap").step_into() end, { desc = "Step Into" })
+		-- vim.keymap.set("n", "<F12>", function() require("dap").step_out() end, { desc = "Step Out" })
+
+		
 		-- sign("DapBreakpoint", { text = "●", texthl = "DapBreakpoint" })
 		-- --sign("DapBreakpointCondition", { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
 		-- --sign("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })

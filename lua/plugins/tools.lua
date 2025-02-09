@@ -20,11 +20,6 @@ return {
     config = true,
   },
 
-
-
-
-
-
   
   -- Better diagnostics list and others
   {
@@ -67,29 +62,29 @@ return {
   },
 
    -- Markdown Live Preview
-   {
-    "iamcco/markdown-preview.nvim",
-    ft = "markdown",
-    config = function()
-      vim.g.mkdp_auto_start = 1
-    end,
-  },
+  --  {
+  --   "iamcco/markdown-preview.nvim",
+  --   ft = "markdown",
+  --   config = function()
+  --     vim.g.mkdp_auto_start = 1
+  --   end,
+  -- },
 
 
 
-  -- Noice: Floating Command Box
-  {
-    "folke/noice.nvim",
-    dependencies = { "MunifTanjim/nui.nvim" },
-    config = function()
-      require("noice").setup({
-        cmdline = {
-          enabled = true,
-          view = "cmdline_popup", -- Floating command box
-        },
-      })
-    end,
-  },
+  -- -- Noice: Floating Command Box
+  -- {
+  --   "folke/noice.nvim",
+  --   dependencies = { "MunifTanjim/nui.nvim" },
+  --   config = function()
+  --     require("noice").setup({
+  --       cmdline = {
+  --         enabled = true,
+  --         view = "cmdline_popup", -- Floating command box
+  --       },
+  --     })
+  --   end,
+  -- },
 
   -- Floating Terminal
   {
