@@ -33,7 +33,7 @@ This Neovim configuration is designed to be **modular** and **extensible**. It l
 Your configuration is organized as follows:
 
 ```
-~/.config/nvim/
+~/appdata/nvim/
 ├── init.lua                    # Entry point
 ├── lua/
 │   ├── config/                 # Core configuration settings
@@ -47,6 +47,7 @@ Your configuration is organized as follows:
 │   │   ├── git.lua             # Git integration using Gitsigns
 │   │   ├── tools.lua           # Tools (Treesitter, formatters, etc.)
 │   │   ├── telescope.lua       # Telescope configuration for fuzzy finding
+│   │   ├──neo-tree
 │   │   ├── dap.lua             # debugger for c, cpp, py(not work now)
 │   ├── utils.lua               # Utility functions
 │   ├── plugins.lua             # Main plugin loader (Lazy.nvim setup)
